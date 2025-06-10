@@ -1,0 +1,518 @@
+import zipfile
+import os
+
+# Création d'un dossier temporaire pour les fichiers
+folder = "/mnt/data/my_morocco_site"
+os.makedirs(folder, exist_ok=True)
+
+# Contenu des fichiers (6 fichiers HTML)
+files_content = {
+    "index.html": """
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>MY MOROCCO - Accueil</title>
+    <style>
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/2/2c/Flag_of_Morocco.svg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+        }
+        .overlay {
+            background-color: rgba(187, 42, 38, 0.85);
+            min-height: 100vh;
+            padding: 50px;
+            max-width: 700px;
+            margin: auto;
+            border-radius: 20px;
+            box-shadow: 0 0 30px black;
+            text-align: center;
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 0.2em;
+        }
+        nav {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        nav a {
+            color: #ffcc66;
+            font-size: 1.6em;
+            font-weight: bold;
+            text-decoration: none;
+            border: 3px solid #ffcc66;
+            padding: 15px;
+            border-radius: 15px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        nav a:hover {
+            background-color: #ffcc66;
+            color: #bb2a26;
+        }
+        footer {
+            margin-top: 50px;
+            font-size: 1em;
+            color: #ffcc66;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <h1>MY MOROCCO</h1>
+        <p>Préservons ensemble le patrimoine marocain.</p>
+        <nav>
+            <a href="monuments.html">Monuments Historiques</a>
+            <a href="artisanat.html">Artisanat Marocain</a>
+            <a href="cuisine.html">Cuisine Traditionnelle</a>
+            <a href="musique.html">Musique et Traditions</a>
+            <a href="contact.html">Contact / Crédits</a>
+        </nav>
+        <footer>&copy; 2025 MY MOROCCO</footer>
+    </div>
+</body>
+</html>
+""",
+    "monuments.html": """
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Monuments Historiques - MY MOROCCO</title>
+    <style>
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Arial', sans-serif;
+            color: white;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/2/2c/Flag_of_Morocco.svg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .overlay {
+            background-color: rgba(187, 42, 38, 0.85);
+            min-height: 100vh;
+            padding: 30px;
+            max-width: 900px;
+            margin: auto;
+            border-radius: 15px;
+            box-shadow: 0 0 25px black;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .monument {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .monument img {
+            max-width: 300px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px #000;
+        }
+        .monument div {
+            max-width: 550px;
+        }
+        a {
+            color: #ffcc66;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        a:hover {
+            color: white;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #ffcc66;
+        }
+        a.back {
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #ffcc66;
+            text-decoration: none;
+        }
+        a.back:hover {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <a href="index.html" class="back">⬅ Retour à l'accueil</a>
+        <h1>Monuments Historiques</h1>
+        
+        <div class="monument">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Medina_of_Fes.jpg" alt="Médina de Fès" />
+            <div>
+                <h2>Médina de Fès</h2>
+                <p>Une des plus anciennes médinas du Maroc, classée patrimoine mondial de l'UNESCO, célèbre pour ses ruelles, ses souks et son artisanat traditionnel.</p>
+            </div>
+        </div>
+
+        <div class="monument">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/58/Mosque_Hassan_II_-_Casablanca_-_Morocco.jpg" alt="Mosquée Hassan II" />
+            <div>
+                <h2>Mosquée Hassan II</h2>
+                <p>La troisième plus grande mosquée du monde, située à Casablanca, avec un minaret de 210 mètres dominant l'océan Atlantique.</p>
+            </div>
+        </div>
+
+        <div class="monument">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/66/Ait_Benhaddou_Ksar.jpg" alt="Ksar Aït Benhaddou" />
+            <div>
+                <h2>Ksar Aït Benhaddou</h2>
+                <p>Un ksar traditionnel en pisé, classé au patrimoine mondial de l'UNESCO, souvent utilisé comme décor de films.</p>
+            </div>
+        </div>
+
+        <footer>&copy; 2025 MY MOROCCO</footer>
+    </div>
+</body>
+</html>
+""",
+    "artisanat.html": """
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Artisanat Marocain - MY MOROCCO</title>
+    <style>
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Arial', sans-serif;
+            color: white;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/2/2c/Flag_of_Morocco.svg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .overlay {
+            background-color: rgba(187, 42, 38, 0.85);
+            min-height: 100vh;
+            padding: 30px;
+            max-width: 900px;
+            margin: auto;
+            border-radius: 15px;
+            box-shadow: 0 0 25px black;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .item {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .item img {
+            max-width: 300px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px #000;
+        }
+        .item div {
+            max-width: 550px;
+        }
+        a {
+            color: #ffcc66;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        a:hover {
+            color: white;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #ffcc66;
+        }
+        a.back {
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #ffcc66;
+            text-decoration: none;
+        }
+        a.back:hover {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <a href="index.html" class="back">⬅ Retour à l'accueil</a>
+        <h1>Artisanat Marocain</h1>
+        
+        <div class="item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/75/Zellige_Morocco.jpg" alt="Zellige" />
+            <div>
+                <h2>Zellige</h2>
+                <p>Les mosaïques traditionnelles marocaines, composées de petites pièces de céramique colorées assemblées à la main.</p>
+            </div>
+        </div>
+
+        <div class="item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Berber_Tapestry_1.jpg" alt="Tapis berbères" />
+            <div>
+                <h2>Tapis berbères</h2>
+                <p>Des tapis artisanaux tissés par les tribus berbères, connus pour leurs motifs géométriques et leurs couleurs vives.</p>
+            </div>
+        </div>
+
+        <div class="item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Pottery_Safi_Morocco.jpg" alt="Poterie de Safi" />
+            <div>
+                <h2>Poterie de Safi</h2>
+                <p>Un artisanat traditionnel avec des poteries colorées, souvent décorées de motifs floraux et géométriques.</p>
+            </div>
+        </div>
+
+        <footer>&copy; 2025 MY MOROCCO</footer>
+    </div>
+</body>
+</html>
+""",
+    "cuisine.html": """
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Cuisine Traditionnelle - MY MOROCCO</title>
+    <style>
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Arial', sans-serif;
+            color: white;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/2/2c/Flag_of_Morocco.svg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .overlay {
+            background-color: rgba(187, 42, 38, 0.85);
+            min-height: 100vh;
+            padding: 30px;
+            max-width: 900px;
+            margin: auto;
+            border-radius: 15px;
+            box-shadow: 0 0 25px black;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .dish {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .dish img {
+            max-width: 300px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px #000;
+        }
+        .dish div {
+            max-width: 550px;
+        }
+        a {
+            color: #ffcc66;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        a:hover {
+            color: white;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #ffcc66;
+        }
+        a.back {
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #ffcc66;
+            text-decoration: none;
+        }
+        a.back:hover {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <a href="index.html" class="back">⬅ Retour à l'accueil</a>
+        <h1>Cuisine Traditionnelle</h1>
+        
+        <div class="dish">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/49/Tajine_Moroccan_cuisine.jpg" alt="Tajine" />
+            <div>
+                <h2>Tajine</h2>
+                <p>Un plat mijoté emblématique du Maroc, préparé avec de la viande, des légumes et des épices dans un plat en terre cuite.</p>
+            </div>
+        </div>
+
+        <div class="dish">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/64/Couscous_Morocco_01.jpg" alt="Couscous" />
+            <div>
+                <h2>Couscous</h2>
+                <p>Plat traditionnel à base de semoule, servi avec des légumes, de la viande ou du poisson, souvent lors des grandes occasions.</p>
+            </div>
+        </div>
+
+        <div class="dish">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/d/df/Pastilla.JPG" alt="Pastilla" />
+            <div>
+                <h2>Pastilla</h2>
+                <p>Tarte sucrée-salée à base de pigeon ou poulet, d’amandes et de cannelle, une spécialité marocaine raffinée.</p>
+            </div>
+        </div>
+
+        <footer>&copy; 2025 MY MOROCCO</footer>
+    </div>
+</body>
+</html>
+""",
+    "musique.html": """
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Musique et Traditions - MY MOROCCO</title>
+    <style>
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Arial', sans-serif;
+            color: white;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/2/2c/Flag_of_Morocco.svg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .overlay {
+            background-color: rgba(187, 42, 38, 0.85);
+            min-height: 100vh;
+            padding: 30px;
+            max-width: 900px;
+            margin: auto;
+            border-radius: 15px;
+            box-shadow: 0 0 25px black;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 30px;
+        }
+        li img {
+            max-width: 400px;
+            display: block;
+            margin-top: 10px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px #000;
+        }
+        a {
+            color: #ffcc66;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2em;
+            display: inline-block;
+            margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+        a:hover {
+            color: white;
+        }
+        footer {
+            margin-top: 40px;
+            color: #ffcc66;
+            text-align: center;
+        }
+        a.back {
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #ffcc66;
+            text-decoration: none;
+        }
+        a.back:hover {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <a href="index.html" class="back">⬅ Retour à l'accueil</a>
+        <h1>Musique et Traditions</h1>
+        <p>Les rythmes et danses qui racontent l’histoire et l’âme du Maroc.</p>
+        <ul>
+            <li>
+                <a href="#">Gnaoua</a>
+                <p>Musique spirituelle et rituelle mêlant influences africaines et marocaines.</p>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Gnawa_musicians_in_Marrakech.jpg" alt="Gnaoua" />
+            </li>
+            <li>
+                <a href="#">Ahidous</a>
+                <p>Danse collective berbère accompagnée de chants traditionnels.</p>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Ahidous.jpg" alt="Ahidous" />
+            </li>
+            <li>
+                <a href="#">Fantasia</a>
+                <p>Spectacle équestre traditionnel, expression de la bravoure et de la fête.</p>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Fantasia_in_Morocco.jpg" alt="Fantasia" />
+            </li>
+        </ul>
+        <footer>&copy; 2025 MY MOROCCO</footer>
+    </div>
+</body>
+</html>
+""",
+    "contact.html": """
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Contact - MY MOROCCO</title>
+    <style>
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/2/2c/Flag_of_Morocco.svg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .overlay {
+            background-color: rgba(255, 255, 255, 0.9);
+            min-height: 100vh;
+            padding: 40px;
+            max-width: 600px;
+            margin: auto;
+            border-radius: 15px;
+            margin-top: 50px;
+            box-shadow: 0 0 25px #999;
+        }
+        h1 {
+            color: #bb2a26;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, textarea {
+            padding: 10
