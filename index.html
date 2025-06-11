@@ -9,3 +9,61 @@
   <p>Un site dédié à la préservation du patrimoine marocain.</p>
 </body>
 </html>
+
+from zipfile import ZipFile
+from pathlib import Path
+
+# Créer la structure du site
+site_files = {
+    "index.html": """<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>My Morocco</title>
+  <style>
+    body {
+      background: url('https://upload.wikimedia.org/wikipedia/commons/2/2c/Flag_of_Morocco.svg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      text-align: center;
+      font-family: sans-serif;
+      padding: 50px;
+    }
+    a {
+      display: block;
+      margin: 10px;
+      color: white;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Bienvenue sur My Morocco</h1>
+  <p>Un site dédié à la préservation du patrimoine marocain.</p>
+  <nav>
+    <a href="monuments.html">Monuments historiques</a>
+    <a href="artisanat.html">Artisanat marocain</a>
+    <a href="cuisine.html">Cuisine traditionnelle</a>
+    <a href="musique.html">Musique et traditions</a>
+    <a href="contact.html">Contact / Crédits</a>
+  </nav>
+</body>
+</html>
+""",
+
+    "monuments.html": "<h1>Médina de Fès, Mosquée Hassan II, Ksar Aït Benhaddou</h1>",
+    "artisanat.html": "<h1>Zellige, Tapis berbères, Poterie de Safi</h1>",
+    "cuisine.html": "<h1>Tajine, Couscous, Pastilla</h1>",
+    "musique.html": "<h1>Gnaoua, Ahidous, Fantasia</h1>",
+    "contact.html": "<h1>Contact : samiimmani - Merci pour votre visite !</h1>"
+}
+
+# Créer un fichier ZIP
+zip_path = "/mnt/data/MyMorocco_Site.zip"
+with ZipFile(zip_path, 'w') as zipf:
+    for filename, content in site_files.items():
+        file_path = Path(f"/tmp/{filename}")
+        file_path.write_text(content, encoding='utf-8')
+        zipf.write(file_path, arcname=filename)
+
+zip_path
